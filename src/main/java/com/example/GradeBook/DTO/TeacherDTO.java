@@ -19,4 +19,7 @@ public class TeacherDTO {
 
     @NonNull
     private UserDto user;
+
+    @NonNull
+    private SubjectTypeDto subjectType;
 }

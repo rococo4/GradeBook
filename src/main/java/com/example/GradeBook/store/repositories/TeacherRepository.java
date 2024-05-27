@@ -1,13 +1,10 @@
 package com.example.GradeBook.store.repositories;
 
-import com.example.GradeBook.store.entities.StudentEntity;
-import lombok.NonNull;
+import com.example.GradeBook.store.entities.TeacherEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
+public interface TeacherRepository extends JpaRepository<TeacherEntity, Long> {
 }

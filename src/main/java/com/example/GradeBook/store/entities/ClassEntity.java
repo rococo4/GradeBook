@@ -24,6 +24,6 @@ public class ClassEntity {
 
     @OneToMany
     @JoinColumn(name = "student_id", referencedColumnName = "id")
-    private List<UserEntity> students = new ArrayList<>();
+    private List<StudentEntity> students = new ArrayList<>();
 
 }

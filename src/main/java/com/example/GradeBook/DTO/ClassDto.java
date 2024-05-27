@@ -20,5 +20,5 @@ public class ClassDto {
 
     @NonNull
     @JsonProperty("users")
-    private List<UserDto> users;
+    private List<StudentDto> students;
 }

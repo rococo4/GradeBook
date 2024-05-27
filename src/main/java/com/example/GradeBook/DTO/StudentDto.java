@@ -13,5 +13,4 @@ import lombok.*;
 public class StudentDto {
     @NonNull
     private Long id;
-
 }

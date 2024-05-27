@@ -1,6 +1,7 @@
 package com.example.GradeBook.store.entities;
 
 
+import com.example.GradeBook.DTO.SubjectTypeDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,8 @@ public class TeacherEntity {
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     private UserEntity userId;
+
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id")
+    private SubjectTypeEntity subjectType;
 }

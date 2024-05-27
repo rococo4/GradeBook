@@ -14,7 +14,7 @@ import java.util.List;
 public class StudentController {
     public static final String GET_GRADES = "api/student/getGrades";
 
-    StudentService studentService;
+    private StudentService studentService;
     @GetMapping(GET_GRADES)
     public final List<GradeDto> getGrades(@RequestParam(value = "student_id") long studentId) {
         return studentService.getGradesForStudent(studentId);

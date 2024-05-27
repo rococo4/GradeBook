@@ -10,7 +10,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class GradeDto {
-    @NonNull
+
     @JsonProperty("grade_id")
     private Long gradeId;
 
