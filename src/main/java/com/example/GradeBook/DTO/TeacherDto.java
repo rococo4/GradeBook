@@ -1,8 +1,5 @@
 package com.example.GradeBook.DTO;
 
-import com.example.GradeBook.store.entities.ClassEntity;
-import com.example.GradeBook.store.entities.UserEntity;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +8,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TeacherDTO {
+public class TeacherDto {
     @NonNull
     private Long id;
 
@@ -22,4 +19,5 @@ public class TeacherDTO {
 
     @NonNull
     private SubjectTypeDto subjectType;
+
 }

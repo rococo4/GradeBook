@@ -4,6 +4,8 @@ import com.example.GradeBook.DTO.ClassDto;
 import com.example.GradeBook.DTO.GradeDto;
 import com.example.GradeBook.DTO.StudentDto;
 import com.example.GradeBook.DTO.SubjectTypeDto;
+import com.example.GradeBook.Factories.ClassFactory;
+import com.example.GradeBook.Factories.GradeFactory;
 import com.example.GradeBook.store.entities.*;
 import com.example.GradeBook.store.repositories.ClassRepository;
 import com.example.GradeBook.store.repositories.GradeRepository;
@@ -24,15 +26,16 @@ public class TeacherService {
     private SubjectTypeRepository subjectTypeRepository;
 
 
+    private ClassFactory classFactory;
+    private GradeFactory gradeFactory;
+
+
     public List<ClassDto> getAllClassesByTeacherId(Long teacherId) {
         return teacherRepository.findById(teacherId)
                 // todo: написать exception если не нашелся учитель
                 .orElseThrow()
                 .getClasses().stream()
-                .map(classEntity -> ClassDto.builder()
-                        .classId(classEntity.getClassId())
-                        .className(classEntity.getClassName())
-                        .build()).collect(Collectors.toList());
+                .map(classFactory::makeClassDto).toList();
     }
 
     public List<List<GradeDto>> getAllGradesForClassByClassIdTeacherId(Long classId, Long teacherId) {
@@ -47,22 +50,13 @@ public class TeacherService {
     }
 
     public List<List<GradeDto>> putMarkToStudent(List<GradeDto> gradesDto, Long classId) {
-        List<GradeEntity> grades = gradesDto.stream().map(gradeDto -> GradeEntity.builder()
-                .mark(gradeDto.getMark())
-                .student(StudentEntity.builder()
-                        .id(gradeDto.getStudent()
-                                .getId()).build())
-                .createdAt(gradeDto.getCreatedAt())
-                .subjectType(SubjectTypeEntity.builder()
-                        .subjectTypeId(gradeDto.getSubjectType().getSubjectTypeId())
-                        .subjectTypeName(gradeDto.getSubjectType().getSubjectTypeName()).build())
-                .build()).toList();
+        List<GradeEntity> grades = gradesDto.stream().map(gradeFactory::makeGradeEntity).toList();
         gradeRepository.saveAllAndFlush(grades);
 
         ClassEntity classEntity = classRepository.findById(classId).orElseThrow();
 
         return classEntity.getStudents().stream().map(student ->
-                        getAllMarksForStudent(student, grades.getFirst().getSubjectType()))
+                        getAllMarksForStudent(student, grades.get(0).getSubjectType()))
                 .collect(Collectors.toList());
 
     }
@@ -70,18 +64,7 @@ public class TeacherService {
     private List<GradeDto> getAllMarksForStudent(StudentEntity student, SubjectTypeEntity subjectType) {
         return gradeRepository.findAllByStudentAndSubjectType(student, subjectType)
                 .orElseThrow()
-                .stream().map(gradeEntity -> {
-                    return GradeDto.builder()
-                            .mark(gradeEntity.getMark())
-                            .student(StudentDto.builder().id(student.getId()).build())
-                            .gradeId(gradeEntity.getGradeId())
-                            .createdAt(gradeEntity.getCreatedAt())
-                            .subjectType(
-                                    SubjectTypeDto.builder()
-                                            .subjectTypeName(subjectType.getSubjectTypeName())
-                                            .subjectTypeId(subjectType.getSubjectTypeId())
-                                            .build())
-                            .build();
-                }).collect(Collectors.toList());
+                .stream().map(gradeFactory::makeGradeDto)
+                .collect(Collectors.toList());
     }
 }

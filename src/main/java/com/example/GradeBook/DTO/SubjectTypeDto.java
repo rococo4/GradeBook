@@ -15,4 +15,6 @@ public class SubjectTypeDto {
     @NonNull
     @JsonProperty("subject_type_name")
     private String subjectTypeName;
+
+
 }

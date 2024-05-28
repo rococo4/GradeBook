@@ -28,5 +28,5 @@ public class UserDto {
     private String email;
 
     @NonNull
-    private RoleEntitiy role;
+    private RoleDto role;
 }

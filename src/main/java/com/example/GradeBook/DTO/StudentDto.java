@@ -13,4 +13,7 @@ import lombok.*;
 public class StudentDto {
     @NonNull
     private Long id;
+
+    @NonNull
+    private UserDto userId;
 }

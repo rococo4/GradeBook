@@ -35,4 +35,5 @@ public class TeacherController {
             @RequestParam(value = "teacher_id") Long teacherId) {
         return teacherService.getAllGradesForClassByClassIdTeacherId(classId, teacherId);
     }
+
 }

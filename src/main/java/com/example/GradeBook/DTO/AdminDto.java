@@ -14,8 +14,6 @@ public class AdminDto {
     @Column(name = "id")
     private Long id;
 
-
-
     @NonNull
     private UserDto user;
 }
