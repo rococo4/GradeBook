@@ -19,8 +19,10 @@ public class UserEntity {
     private String firstName;
     private String lastName;
 
+    //todo уникальный
     private String username;
     private String password;
+    //todo уникальный
     private String email;
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
