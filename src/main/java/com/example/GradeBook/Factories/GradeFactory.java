@@ -4,7 +4,9 @@ package com.example.GradeBook.Factories;
 import com.example.GradeBook.DTO.GradeDto;
 import com.example.GradeBook.Services.StudentService;
 import com.example.GradeBook.store.entities.GradeEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GradeFactory {
     private StudentFactory studentFactory;
     private SubjectTypeFactory subjectTypeFactory;

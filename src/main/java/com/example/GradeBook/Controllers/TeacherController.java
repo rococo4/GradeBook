@@ -25,8 +25,8 @@ public class TeacherController {
 
     //todo: сделать ответ успешно/неуспешно
     @PostMapping(PUT_MARK)
-    public List<List<GradeDto>> putMarkToStudent(@PathVariable("class-id") Long class_id, @RequestBody List<GradeDto> gradesDto) {
-        return teacherService.putMarkToStudent(gradesDto, class_id);
+    public List<List<GradeDto>> putMarks(@PathVariable("class-id") Long classId, @RequestBody List<GradeDto> gradesDto) {
+        return teacherService.putMarks(gradesDto, classId);
     }
 
     @GetMapping(GEL_ALL_DATA_FOR_CLASS)

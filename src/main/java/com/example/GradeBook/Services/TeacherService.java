@@ -2,8 +2,6 @@ package com.example.GradeBook.Services;
 
 import com.example.GradeBook.DTO.ClassDto;
 import com.example.GradeBook.DTO.GradeDto;
-import com.example.GradeBook.DTO.StudentDto;
-import com.example.GradeBook.DTO.SubjectTypeDto;
 import com.example.GradeBook.Factories.ClassFactory;
 import com.example.GradeBook.Factories.GradeFactory;
 import com.example.GradeBook.store.entities.*;
@@ -49,7 +47,7 @@ public class TeacherService {
                 .collect(Collectors.toList());
     }
 
-    public List<List<GradeDto>> putMarkToStudent(List<GradeDto> gradesDto, Long classId) {
+    public List<List<GradeDto>> putMarks(List<GradeDto> gradesDto, Long classId) {
         List<GradeEntity> grades = gradesDto.stream().map(gradeFactory::makeGradeEntity).toList();
         gradeRepository.saveAllAndFlush(grades);
 
