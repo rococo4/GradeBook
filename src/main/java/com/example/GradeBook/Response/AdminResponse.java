@@ -1,18 +1,16 @@
-package com.example.GradeBook.DTO;
+package com.example.GradeBook.Response;
 
-import com.example.GradeBook.store.entities.UserEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdminDto {
+public class AdminResponse {
     @JsonProperty("admin_id")
     private Long adminId;
 
     @NonNull
-    private Long userId;
+    private UserResponse userId;
 }

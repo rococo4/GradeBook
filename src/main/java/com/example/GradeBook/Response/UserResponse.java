@@ -1,15 +1,13 @@
-package com.example.GradeBook.DTO;
+package com.example.GradeBook.Response;
 
-import com.example.GradeBook.store.entities.RoleEntitiy;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserResponse {
 
     @JsonProperty("user_id")
     private Long userId;
@@ -17,8 +15,6 @@ public class UserDto {
     @NonNull
     private String username;
 
-    @NonNull
-    private String password;
 
     @NonNull
     @JsonProperty("first_name")
@@ -32,5 +28,5 @@ public class UserDto {
     private String email;
 
     @NonNull
-    private Long role;
+    private RoleResponse role;
 }

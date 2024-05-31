@@ -11,9 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class StudentDto {
-    @NonNull
-    private Long id;
+
+    @JsonProperty("student_id")
+    private Long studentId;
 
     @NonNull
-    private UserDto userId;
+    private Long userId;
 }

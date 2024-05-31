@@ -1,14 +1,13 @@
-package com.example.GradeBook.DTO;
+package com.example.GradeBook.Response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoleDto {
+public class RoleResponse {
     @JsonProperty("role_id")
     private Long roleId;
 

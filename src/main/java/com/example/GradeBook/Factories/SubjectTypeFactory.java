@@ -1,13 +1,14 @@
 package com.example.GradeBook.Factories;
 
 import com.example.GradeBook.DTO.SubjectTypeDto;
+import com.example.GradeBook.Response.SubjectTypeResponse;
 import com.example.GradeBook.store.entities.SubjectTypeEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SubjectTypeFactory {
-    public SubjectTypeDto makeSubjectTypeDto(SubjectTypeEntity subjectTypeEntity) {
-       return SubjectTypeDto.builder()
+    public SubjectTypeResponse makeSubjectTypeResponse(SubjectTypeEntity subjectTypeEntity) {
+       return SubjectTypeResponse.builder()
                 .subjectTypeId(subjectTypeEntity.getSubjectTypeId())
                 .subjectTypeName(subjectTypeEntity.getSubjectTypeName())
                 .build();

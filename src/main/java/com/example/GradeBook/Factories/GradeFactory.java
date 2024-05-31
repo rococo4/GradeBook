@@ -2,21 +2,26 @@ package com.example.GradeBook.Factories;
 
 
 import com.example.GradeBook.DTO.GradeDto;
-import com.example.GradeBook.Services.StudentService;
+import com.example.GradeBook.Response.GradeResponse;
 import com.example.GradeBook.store.entities.GradeEntity;
+import com.example.GradeBook.store.repositories.StudentRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class GradeFactory {
-    private StudentFactory studentFactory;
-    private SubjectTypeFactory subjectTypeFactory;
+    private final StudentFactory studentFactory;
+    private final SubjectTypeFactory subjectTypeFactory;
 
-    public GradeDto makeGradeDto(GradeEntity gradeEntity) {
-       return GradeDto.builder()
+    private final StudentRepository studentRepository;
+
+    public GradeResponse makeGradeResponse(GradeEntity gradeEntity) {
+       return GradeResponse.builder()
                 .gradeId(gradeEntity.getGradeId())
                 .mark(gradeEntity.getMark())
-                .student(studentFactory.makeStudentDto(gradeEntity.getStudent()))
-                .subjectType(subjectTypeFactory.makeSubjectTypeDto(gradeEntity.getSubjectType()))
+                .student(studentFactory.makeStudentResponse(gradeEntity.getStudent()))
+                .subjectType(subjectTypeFactory.makeSubjectTypeResponse(gradeEntity.getSubjectType()))
                 .createdAt(gradeEntity.getCreatedAt())
                 .build();
     }
@@ -25,7 +30,8 @@ public class GradeFactory {
         return GradeEntity.builder()
                 .gradeId(gradeDto.getGradeId())
                 .mark(gradeDto.getMark())
-                .student(studentFactory.makeStudentEntity(gradeDto.getStudent()))
+                // todo: выкинуть исключение если неправильный id студента
+                .student(studentRepository.findById(gradeDto.getStudentId()).orElseThrow())
                 .subjectType(subjectTypeFactory.makeSubjectTypeEntity(gradeDto.getSubjectType()))
                 .createdAt(gradeDto.getCreatedAt())
                 .build();

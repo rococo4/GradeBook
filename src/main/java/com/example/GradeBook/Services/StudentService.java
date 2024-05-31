@@ -1,19 +1,14 @@
 package com.example.GradeBook.Services;
 
-import com.example.GradeBook.DTO.ClassDto;
 import com.example.GradeBook.DTO.GradeDto;
-import com.example.GradeBook.DTO.StudentDto;
 import com.example.GradeBook.Factories.GradeFactory;
-import com.example.GradeBook.store.entities.GradeEntity;
 import com.example.GradeBook.store.entities.StudentEntity;
 import com.example.GradeBook.store.repositories.GradeRepository;
 import com.example.GradeBook.store.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +24,7 @@ public class StudentService {
 
         return gradeRepository.findAllByStudent(student).stream()
                 .flatMap(List::stream)
-                .map(gradeFactory::makeGradeDto)
+                .map(gradeFactory::makeGradeResponse)
                 .toList();
     }
 }

@@ -33,7 +33,7 @@ public class TeacherService {
                 // todo: написать exception если не нашелся учитель
                 .orElseThrow()
                 .getClasses().stream()
-                .map(classFactory::makeClassDto).toList();
+                .map(classFactory::makeClassResponse).toList();
     }
 
     public List<List<GradeDto>> getAllGradesForClassByClassIdTeacherId(Long classId, Long teacherId) {
@@ -62,7 +62,7 @@ public class TeacherService {
     private List<GradeDto> getAllMarksForStudent(StudentEntity student, SubjectTypeEntity subjectType) {
         return gradeRepository.findAllByStudentAndSubjectType(student, subjectType)
                 .orElseThrow()
-                .stream().map(gradeFactory::makeGradeDto)
+                .stream().map(gradeFactory::makeGradeResponse)
                 .collect(Collectors.toList());
     }
 }

@@ -17,13 +17,13 @@ public class UserService {
     //todo: исключение
     public UserDto getUser(Long userId) {
         return userFactory
-                .makeUserDto(userRepository.findById(userId).orElseThrow());
+                .makeUserResponse(userRepository.findById(userId).orElseThrow());
     }
 
 
     public UserDto addUpdateUser(UserDto userDto) {
         UserEntity userEntity = userRepository.saveAndFlush(userFactory.makeUserEntity(userDto));
-        return userFactory.makeUserDto(userEntity);
+        return userFactory.makeUserResponse(userEntity);
     }
 
 
@@ -39,7 +39,7 @@ public class UserService {
         }
         userEntity.setPassword(password);
         UserEntity user = userRepository.save(userEntity);
-        return userFactory.makeUserDto(user);
+        return userFactory.makeUserResponse(user);
     }
     public UserDto changeEmail(Long userId, String email) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow();
@@ -48,6 +48,6 @@ public class UserService {
         }
         userEntity.setEmail(email);
         UserEntity user = userRepository.save(userEntity);
-        return userFactory.makeUserDto(user);
+        return userFactory.makeUserResponse(user);
     }
 }

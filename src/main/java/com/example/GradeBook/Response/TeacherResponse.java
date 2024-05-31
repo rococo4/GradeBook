@@ -1,4 +1,4 @@
-package com.example.GradeBook.DTO;
+package com.example.GradeBook.Response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -9,20 +9,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TeacherDto {
+public class TeacherResponse {
 
     @JsonProperty("teacher_id")
     private Long teacherId;
 
-    @JsonProperty("classes_id")
-    private List<Long> classesId;
+    private List<ClassResponse> classes;
 
     @NonNull
-    @JsonProperty("user_id")
-    private Long userId;
+    private UserResponse user;
 
     @NonNull
     @JsonProperty("subject_type")
-    private SubjectTypeDto subjectType;
+    private SubjectTypeResponse subjectType;
 
 }

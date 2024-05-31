@@ -1,24 +1,34 @@
 package com.example.GradeBook.Factories;
 import com.example.GradeBook.DTO.UserDto;
+import com.example.GradeBook.Response.UserResponse;
 import com.example.GradeBook.store.entities.UserEntity;
+import com.example.GradeBook.store.repositories.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 @Component
+@RequiredArgsConstructor
 public class UserFactory {
-    RoleFactory roleFactory;
-    public UserDto makeUserDto(UserEntity user) {
-        return UserDto.builder()
-                .id(user.getId())
+    private final RoleFactory roleFactory;
+    private final RoleRepository roleRepository;
+
+    public UserResponse makeUserResponse(UserEntity user) {
+        return UserResponse.builder()
+                .username(user.getUsername())
+                .userId(user.getId())
                 .email(user.getEmail())
-                .role(roleFactory.makeRoleDto(user.getRole()))
+                .role(roleFactory.makeRoleResponse(user.getRole()))
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
                 .build();
     }
     public UserEntity makeUserEntity(UserDto user) {
         return UserEntity.builder()
-                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .id(user.getUserId())
                 .email(user.getEmail())
-                .role(roleFactory.makeRoleEntity(user.getRole()))
+                //todo: эксэпшн если не правильно id передали
+                .role(roleRepository.findById(user.getRole()).orElseThrow())
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
                 .build();

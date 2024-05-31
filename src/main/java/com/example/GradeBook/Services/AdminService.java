@@ -14,7 +14,6 @@ import com.example.GradeBook.store.repositories.StudentRepository;
 import com.example.GradeBook.store.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,17 +32,17 @@ public class AdminService {
     public StudentDto addUpdateStudent(StudentDto studentDto) {
         StudentEntity studentEntity = studentRepository
                 .save(studentFactory.makeStudentEntity(studentDto));
-        return studentFactory.makeStudentDto(studentEntity);
+        return studentFactory.makeStudentResponse(studentEntity);
     }
 
     public StudentDto getStudentById(Long studentId) {
         return studentFactory
-                .makeStudentDto(studentRepository.findById(studentId).orElseThrow());
+                .makeStudentResponse(studentRepository.findById(studentId).orElseThrow());
     }
 
     public List<StudentDto> getAllStudents() {
         return studentRepository.findAll().stream()
-                .map(studentFactory::makeStudentDto)
+                .map(studentFactory::makeStudentResponse)
                 .collect(Collectors.toList());
     }
 
@@ -57,16 +56,16 @@ public class AdminService {
 
     public TeacherDto addUpdateTeacher(TeacherDto teacherDto) {
         TeacherEntity teacherEntity = teacherRepository.saveAndFlush(teacherFactory.makeTeacherEntity(teacherDto));
-        return teacherFactory.makeTeacherDto(teacherEntity);
+        return teacherFactory.makeTeacherResponse(teacherEntity);
     }
 
     public TeacherDto getTeacherById(Long teacherId) {
         return teacherFactory
-                .makeTeacherDto(teacherRepository.findById(teacherId).orElseThrow());
+                .makeTeacherResponse(teacherRepository.findById(teacherId).orElseThrow());
     }
 
     public List<TeacherDto> getAllTeachers() {
-        return teacherRepository.findAll().stream().map(teacherFactory::makeTeacherDto).collect(Collectors.toList());
+        return teacherRepository.findAll().stream().map(teacherFactory::makeTeacherResponse).collect(Collectors.toList());
     }
 
     public void deleteByTeacherId(Long teacherId) {
@@ -77,18 +76,18 @@ public class AdminService {
 
     public ClassDto createUpdateClass(ClassDto classDto) {
         ClassEntity classEntity = classRepository.saveAndFlush(classFactory.makeClassEntity(classDto));
-        return classFactory.makeClassDto(classEntity);
+        return classFactory.makeClassResponse(classEntity);
 
     }
 
     public ClassDto getClass( Long classId) {
         return classFactory.
-                makeClassDto(classRepository.findById(classId).orElseThrow());
+                makeClassResponse(classRepository.findById(classId).orElseThrow());
     }
 
     public List<ClassDto> getAllClasses() {
         return classRepository.findAll().stream()
-                .map(classFactory::makeClassDto)
+                .map(classFactory::makeClassResponse)
                 .toList();
     }
 

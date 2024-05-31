@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class AdminController {
+    // todo если передается одна из dto без user выкинуть ошибку
     public final String CREATE_UPDATE_STUDENT = "api/admin/students/{studentId}";
     public final String GET_STUDENT= "api/admin/students/{studentId}";
     public final String GET_ALL_STUDENTS = "api/admin/students";
@@ -67,6 +68,7 @@ public class AdminController {
         return adminService.getAllTeachers();
     }
 
+    //todo разобратсья с секьюрити(удаление)
     @DeleteMapping(DELETE_TEACHER)
     public void deleteTeacher(@PathVariable Long teacherId) {
         adminService.deleteByTeacherId(teacherId);

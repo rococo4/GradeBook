@@ -3,6 +3,8 @@ package com.example.GradeBook.Controllers;
 import com.example.GradeBook.DTO.UserDto;
 import com.example.GradeBook.Services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
+
     @GetMapping(CRUD_USER)
     public UserDto getUser(@PathVariable Long userId) {
         return userService.getUser(userId);
@@ -22,6 +25,7 @@ public class UserController {
 
     @PostMapping(CRUD_USER)
     public UserDto addUpdateUser(@RequestBody UserDto userDto) {
+        System.out.println(userDto);
         return userService.addUpdateUser(userDto);
     }
 

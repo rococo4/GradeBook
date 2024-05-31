@@ -1,4 +1,4 @@
-package com.example.GradeBook.DTO;
+package com.example.GradeBook.Response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SubjectTypeDto {
+public class SubjectTypeResponse {
 
     @JsonProperty("subject_type_id")
     private Long subjectTypeId;
