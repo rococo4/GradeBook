@@ -1,9 +1,12 @@
 package com.example.GradeBook.Services;
 
-import com.example.GradeBook.DTO.ClassDto;
 import com.example.GradeBook.DTO.GradeDto;
+import com.example.GradeBook.Exceptions.NotFoundException;
 import com.example.GradeBook.Factories.ClassFactory;
 import com.example.GradeBook.Factories.GradeFactory;
+import com.example.GradeBook.Response.ClassResponse;
+import com.example.GradeBook.Response.GradeResponse;
+import com.example.GradeBook.Response.JournalResponse;
 import com.example.GradeBook.store.entities.*;
 import com.example.GradeBook.store.repositories.ClassRepository;
 import com.example.GradeBook.store.repositories.GradeRepository;
@@ -18,50 +21,67 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TeacherService {
-    private TeacherRepository teacherRepository;
-    private ClassRepository classRepository;
-    private GradeRepository gradeRepository;
-    private SubjectTypeRepository subjectTypeRepository;
+    private final TeacherRepository teacherRepository;
+    private final ClassRepository classRepository;
+    private final GradeRepository gradeRepository;
+    private final SubjectTypeRepository subjectTypeRepository;
 
 
-    private ClassFactory classFactory;
-    private GradeFactory gradeFactory;
+    private final ClassFactory classFactory;
+    private final GradeFactory gradeFactory;
 
 
-    public List<ClassDto> getAllClassesByTeacherId(Long teacherId) {
+    public List<ClassResponse> getAllClassesByTeacherId(Long teacherId) {
         return teacherRepository.findById(teacherId)
                 // todo: написать exception если не нашелся учитель
-                .orElseThrow()
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Teacher with id %s not found", teacherId)))
                 .getClasses().stream()
                 .map(classFactory::makeClassResponse).toList();
     }
 
-    public List<List<GradeDto>> getAllGradesForClassByClassIdTeacherId(Long classId, Long teacherId) {
+    public JournalResponse getJournalByClassIdTeacherId(Long classId, Long teacherId) {
         //todo: написать exception если класса не нашлось
-        ClassEntity classEntity = classRepository.findById(classId).orElseThrow();
+        ClassEntity classEntity = classRepository.findById(classId).orElseThrow(() -> new NotFoundException(
+                String.format("Class with id %s not found", classId)));
         //todo: написать exception если не нашлось учителя
-        TeacherEntity teacherEntity = teacherRepository.findById(teacherId).orElseThrow();
+        TeacherEntity teacherEntity = teacherRepository.findById(teacherId).orElseThrow(() -> new NotFoundException(
+                String.format("Teacher with id %s not found", teacherId)));
 
-        return classEntity.getStudents().stream().map(student ->
-                        getAllMarksForStudent(student, teacherEntity.getSubjectType()))
-                .collect(Collectors.toList());
+        return JournalResponse.builder()
+                .classId(classId)
+                .teacherId(teacherId)
+                .classJournal(classEntity.getStudents().stream().collect(Collectors.toMap(
+                        StudentEntity::getId,
+                        studentEntity -> getAllMarksForStudent(studentEntity, teacherEntity.getSubjectType())
+                ))).build();
     }
 
-    public List<List<GradeDto>> putMarks(List<GradeDto> gradesDto, Long classId) {
+    public JournalResponse putMarks(List<GradeDto> gradesDto, Long classId, Long teacherId) {
         List<GradeEntity> grades = gradesDto.stream().map(gradeFactory::makeGradeEntity).toList();
         gradeRepository.saveAllAndFlush(grades);
 
-        ClassEntity classEntity = classRepository.findById(classId).orElseThrow();
+        ClassEntity classEntity = classRepository.findById(classId).orElseThrow(() -> new NotFoundException(
+                String.format("Class with id %s not found", classId)));
 
-        return classEntity.getStudents().stream().map(student ->
-                        getAllMarksForStudent(student, grades.get(0).getSubjectType()))
-                .collect(Collectors.toList());
+        TeacherEntity teacherEntity = teacherRepository.findById(teacherId).orElseThrow(() -> new NotFoundException(
+                String.format("Teacher with id %s not found", teacherId)));
+
+        return JournalResponse.builder()
+                .classId(classId)
+                .teacherId(teacherId)
+                .classJournal(classEntity.getStudents().stream().collect(Collectors.toMap(
+                        StudentEntity::getId,
+                        studentEntity -> getAllMarksForStudent(studentEntity, teacherEntity.getSubjectType())
+                ))).build();
 
     }
 
-    private List<GradeDto> getAllMarksForStudent(StudentEntity student, SubjectTypeEntity subjectType) {
+    private List<GradeResponse> getAllMarksForStudent(StudentEntity student, SubjectTypeEntity subjectType) {
         return gradeRepository.findAllByStudentAndSubjectType(student, subjectType)
-                .orElseThrow()
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Marks for student with id %s  for subject %s were not found",
+                                student.getId(), subjectType.getSubjectTypeName())))
                 .stream().map(gradeFactory::makeGradeResponse)
                 .collect(Collectors.toList());
     }

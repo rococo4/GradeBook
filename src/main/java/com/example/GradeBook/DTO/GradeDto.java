@@ -21,7 +21,7 @@ public class GradeDto {
     private Instant createdAt;
 
     @NonNull
-    @JsonProperty("student")
+    @JsonProperty("student_id")
     private Long studentId;
 
     @NonNull

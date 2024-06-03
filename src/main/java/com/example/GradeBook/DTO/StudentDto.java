@@ -16,5 +16,6 @@ public class StudentDto {
     private Long studentId;
 
     @NonNull
+    @JsonProperty("user_id")
     private Long userId;
 }

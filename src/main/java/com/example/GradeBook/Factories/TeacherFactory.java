@@ -1,6 +1,7 @@
 package com.example.GradeBook.Factories;
 
 import com.example.GradeBook.DTO.TeacherDto;
+import com.example.GradeBook.Exceptions.NotFoundException;
 import com.example.GradeBook.Response.TeacherResponse;
 import com.example.GradeBook.store.entities.TeacherEntity;
 import com.example.GradeBook.store.repositories.ClassRepository;
@@ -17,7 +18,6 @@ public class TeacherFactory {
     private final UserFactory userFactory;
     private final SubjectTypeFactory subjectTypeFactory;
     private final ClassFactory classFactory;
-    private final TeacherRepository teacherRepository;
 
     private final UserRepository userRepository;
     private final ClassRepository classRepository;
@@ -36,7 +36,10 @@ public class TeacherFactory {
                 .userId(userRepository.findById(teacherDto.getUserId()).orElseThrow())
                 .subjectType(subjectTypeFactory.makeSubjectTypeEntity(teacherDto.getSubjectType()))
                 //todo: исключение если неправильный id класса
-                .classes(teacherDto.getClassesId().stream().map(classRepository::findById).map(Optional::orElseThrow).toList())
+                .classes(teacherDto.getClassesId().stream().
+                        map((classId) -> classRepository.findById(classId)
+                                .orElseThrow(()-> new NotFoundException(
+                                        String.format("Class with id %s not found",classId)))).toList())
                 .build();
     }
 }

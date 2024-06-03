@@ -1,6 +1,7 @@
 package com.example.GradeBook.Controllers;
 
 import com.example.GradeBook.DTO.UserDto;
+import com.example.GradeBook.Response.UserResponse;
 import com.example.GradeBook.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -19,12 +20,12 @@ public class UserController {
 
 
     @GetMapping(CRUD_USER)
-    public UserDto getUser(@PathVariable Long userId) {
+    public UserResponse getUser(@PathVariable Long userId) {
         return userService.getUser(userId);
     }
 
     @PostMapping(CRUD_USER)
-    public UserDto addUpdateUser(@RequestBody UserDto userDto) {
+    public UserResponse addUpdateUser(@RequestBody UserDto userDto) {
         System.out.println(userDto);
         return userService.addUpdateUser(userDto);
     }
@@ -34,15 +35,16 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
+    // todo Вернуть типо успешно или нет
     @PostMapping(CHANGE_PASSWORD)
-    public UserDto changePassword(
+    public UserResponse changePassword(
             @PathVariable Long userId,
             @RequestParam(name = "password", required = true) String password) {
        return userService.changePassword(userId, password);
 
     }
     @PostMapping(CHANGE_EMAIL)
-    public UserDto changeEmail(
+    public UserResponse changeEmail(
             @PathVariable Long userId,
             @RequestParam(name = "email", required = true) String email) {
        return userService.changeEmail(userId, email);

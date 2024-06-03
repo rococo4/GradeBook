@@ -2,6 +2,7 @@ package com.example.GradeBook.Factories;
 
 
 import com.example.GradeBook.DTO.GradeDto;
+import com.example.GradeBook.Exceptions.NotFoundException;
 import com.example.GradeBook.Response.GradeResponse;
 import com.example.GradeBook.store.entities.GradeEntity;
 import com.example.GradeBook.store.repositories.StudentRepository;
@@ -30,8 +31,10 @@ public class GradeFactory {
         return GradeEntity.builder()
                 .gradeId(gradeDto.getGradeId())
                 .mark(gradeDto.getMark())
-                // todo: выкинуть исключение если неправильный id студента
-                .student(studentRepository.findById(gradeDto.getStudentId()).orElseThrow())
+                .student(studentRepository.
+                        findById(gradeDto.getStudentId())
+                        .orElseThrow(() -> new NotFoundException(
+                                String.format("Student with id %s not found", gradeDto.getStudentId()))))
                 .subjectType(subjectTypeFactory.makeSubjectTypeEntity(gradeDto.getSubjectType()))
                 .createdAt(gradeDto.getCreatedAt())
                 .build();

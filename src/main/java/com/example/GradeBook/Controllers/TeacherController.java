@@ -2,6 +2,8 @@ package com.example.GradeBook.Controllers;
 
 import com.example.GradeBook.DTO.ClassDto;
 import com.example.GradeBook.DTO.GradeDto;
+import com.example.GradeBook.Response.ClassResponse;
+import com.example.GradeBook.Response.JournalResponse;
 import com.example.GradeBook.Services.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +21,24 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping(GET_ALL_CLASSES_FOR_TEACHER)
-    public List<ClassDto> getAllClassesByTeacherId(@RequestParam(value = "teacher_id") Long teacherId) {
+    public List<ClassResponse> getAllClassesByTeacherId(@RequestParam(value = "teacher_id") Long teacherId) {
         return teacherService.getAllClassesByTeacherId(teacherId);
     }
 
     //todo: сделать ответ успешно/неуспешно
     @PostMapping(PUT_MARK)
-    public List<List<GradeDto>> putMarks(@PathVariable("class-id") Long classId, @RequestBody List<GradeDto> gradesDto) {
-        return teacherService.putMarks(gradesDto, classId);
+    public JournalResponse putMarks(
+            @PathVariable("class-id") Long classId,
+            @RequestBody List<GradeDto> gradesDto,
+            @RequestParam(name = "teacher_id") Long teacherId) {
+        return teacherService.putMarks(gradesDto, classId, teacherId);
     }
 
     @GetMapping(GEL_ALL_DATA_FOR_CLASS)
-    public List<List<GradeDto>> getAllGradesForClassByClassIdTeacherId(
+    public JournalResponse getAllGradesForClassByClassIdTeacherId(
             @PathVariable("class-id") Long classId,
             @RequestParam(value = "teacher_id") Long teacherId) {
-        return teacherService.getAllGradesForClassByClassIdTeacherId(classId, teacherId);
+        return teacherService.getJournalByClassIdTeacherId(classId, teacherId);
     }
 
 }

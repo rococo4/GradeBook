@@ -1,6 +1,9 @@
 package com.example.GradeBook.Controllers;
 
 import com.example.GradeBook.DTO.*;
+import com.example.GradeBook.Response.ClassResponse;
+import com.example.GradeBook.Response.StudentResponse;
+import com.example.GradeBook.Response.TeacherResponse;
 import com.example.GradeBook.Services.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +34,17 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping(CREATE_UPDATE_STUDENT)
-    public StudentDto addUpdateStudent(@RequestBody StudentDto studentDto) {
+    public StudentResponse addUpdateStudent(@RequestBody StudentDto studentDto) {
         return adminService.addUpdateStudent(studentDto);
     }
 
     @GetMapping(GET_STUDENT)
-    public StudentDto getStudent(@PathVariable Long studentId) {
+    public StudentResponse getStudent(@PathVariable Long studentId) {
         return adminService.getStudentById(studentId);
     }
 
     @GetMapping(GET_ALL_STUDENTS)
-    public List<StudentDto> getAllStudents() {
+    public List<StudentResponse> getAllStudents() {
         return adminService.getAllStudents();
     }
     @DeleteMapping(DELETE_STUDENT)
@@ -54,17 +57,17 @@ public class AdminController {
 
     @PostMapping(CREATE_UPDATE_TEACHER)
     //todo: сделать возвращение успешно/неуспешно
-    public TeacherDto addUpdateTeacher(@RequestBody TeacherDto teacherDto) {
+    public TeacherResponse addUpdateTeacher(@RequestBody TeacherDto teacherDto) {
         return adminService.addUpdateTeacher(teacherDto);
     }
 
     @GetMapping(GET_TEACHER)
-    public TeacherDto getTeacher(@PathVariable Long teacherId) {
+    public TeacherResponse getTeacher(@PathVariable Long teacherId) {
         return adminService.getTeacherById(teacherId);
     }
 
     @GetMapping(GET_ALL_TEACHERS)
-    public List<TeacherDto> getAllTeachers() {
+    public List<TeacherResponse> getAllTeachers() {
         return adminService.getAllTeachers();
     }
 
@@ -77,16 +80,16 @@ public class AdminController {
 
 
     @PostMapping(CREATE_UPDATE_CLASS)
-    public ClassDto createUpdateClass(@RequestBody ClassDto classDto) {
+    public ClassResponse createUpdateClass(@RequestBody ClassDto classDto) {
         return adminService.createUpdateClass(classDto);
     }
     @GetMapping(GET_CLASS)
-    public ClassDto getClass(@PathVariable Long classId) {
+    public ClassResponse getClass(@PathVariable Long classId) {
         return adminService.getClass(classId);
     }
 
     @GetMapping(GET_ALL_CLASSES)
-    public List<ClassDto> getAllClasses() {
+    public List<ClassResponse> getAllClasses() {
         return adminService.getAllClasses();
     }
 

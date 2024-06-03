@@ -1,6 +1,7 @@
 package com.example.GradeBook.Factories;
 
 import com.example.GradeBook.DTO.StudentDto;
+import com.example.GradeBook.Exceptions.NotFoundException;
 import com.example.GradeBook.Response.StudentResponse;
 import com.example.GradeBook.store.entities.StudentEntity;
 import com.example.GradeBook.store.repositories.StudentRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class StudentFactory {
     private final UserFactory userFactory;
-    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
 
     public StudentResponse makeStudentResponse(StudentEntity student) {
@@ -26,7 +26,10 @@ public class StudentFactory {
                 // todo: проверить если не будет id
                 .id(studentDto.getStudentId())
                 // todo: бросить исключение если не правильный UserId
-                .user(userRepository.findById(studentDto.getUserId()).orElseThrow())
+                .user(userRepository.
+                        findById(studentDto.getUserId()).orElseThrow(() ->
+                                new NotFoundException(
+                                        String.format("User with id %s not found", studentDto.getUserId()))))
                 .build();
     }
 }
