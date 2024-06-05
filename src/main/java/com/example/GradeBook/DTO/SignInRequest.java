@@ -1,9 +1,11 @@
 package com.example.GradeBook.DTO;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class JwtRequest {
+@Builder
+public class SignInRequest {
     private String username;
     private String password;
 }

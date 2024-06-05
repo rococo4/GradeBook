@@ -33,7 +33,7 @@ public class UserFactory {
                 .email(user.getEmail())
                 //todo: эксэпшн если не правильно id передали
                 .role(roleRepository
-                        .findById(user.getRole()).orElseThrow(() ->
+                        .findById(user.getRole().getRoleId()).orElseThrow(() ->
                                 new NotFoundException(String.format("Role with such id %s not found", user.getRole()))))
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())

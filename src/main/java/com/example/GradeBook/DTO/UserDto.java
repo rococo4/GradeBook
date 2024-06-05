@@ -32,5 +32,5 @@ public class UserDto {
     private String email;
 
     @NonNull
-    private Long role;
+    private RoleDto role;
 }

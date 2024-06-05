@@ -1,34 +1,32 @@
-package com.example.GradeBook.Utils;
+package com.example.GradeBook.Services;
 
+import com.example.GradeBook.store.entities.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
-public class JwtTokenUtils {
+public class JwtService {
     private final String secret = "953dbe5e26d41751e3ba46a712a09fba687a1746941fbfd96b517bf8ee8d2884\n";
     private final Duration jwtLifeTime = Duration.ofMinutes(30);
 
-    public String generateToken(UserDetails userDetails ) {
+    public String generateToken(UserEntity userEntity ) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> rolesList = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-        claims.put("roles", rolesList);
-
+        claims.put("role", userEntity.getRole().getRoleName());
+        claims.put("id", userEntity.getId());
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifeTime.toMillis());
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userEntity.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
                 .signWith(SignatureAlgorithm.HS256, secret)
@@ -38,8 +36,17 @@ public class JwtTokenUtils {
     public String getUsername(String token) {
         return getClaimsFromToken(token).getSubject();
     }
-    public List<String> getRoles(String token) {
-        return getClaimsFromToken(token).get("roles", List.class);
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = getUsername(token);
+        return userDetails.getUsername().equals(username) && isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return getClaimsFromToken(token).getExpiration().before(new Date());
+    }
+
+    public String getRole(String token) {
+        return (String) getClaimsFromToken(token).get("role");
     }
 
     private Claims getClaimsFromToken(String token) {
