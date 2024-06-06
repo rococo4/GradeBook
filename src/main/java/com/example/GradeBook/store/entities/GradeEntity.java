@@ -22,7 +22,7 @@ public class GradeEntity {
 
     private Instant createdAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "student", referencedColumnName = "id")
     private StudentEntity student;
 

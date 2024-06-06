@@ -5,6 +5,7 @@ import com.example.GradeBook.Exceptions.NotFoundException;
 import com.example.GradeBook.Response.TeacherResponse;
 import com.example.GradeBook.store.entities.TeacherEntity;
 import com.example.GradeBook.store.repositories.ClassRepository;
+import com.example.GradeBook.store.repositories.SubjectTypeRepository;
 import com.example.GradeBook.store.repositories.TeacherRepository;
 import com.example.GradeBook.store.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class TeacherFactory {
 
     private final UserRepository userRepository;
     private final ClassRepository classRepository;
+    private final SubjectTypeRepository subjectTypeRepository;
 
     public TeacherResponse makeTeacherResponse(TeacherEntity teacherEntity) {
         return TeacherResponse.builder()
@@ -34,7 +36,7 @@ public class TeacherFactory {
         return TeacherEntity.builder()
                 .id(teacherDto.getTeacherId())
                 .userId(userRepository.findById(teacherDto.getUserId()).orElseThrow())
-                .subjectType(subjectTypeFactory.makeSubjectTypeEntity(teacherDto.getSubjectType()))
+                .subjectType(subjectTypeRepository.findById(teacherDto.getSubjectType().getSubjectTypeId()).orElseThrow())
                 //todo: исключение если неправильный id класса
                 .classes(teacherDto.getClassesId().stream().
                         map((classId) -> classRepository.findById(classId)

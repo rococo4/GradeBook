@@ -48,10 +48,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/api/auth").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/**").authenticated()
-                        .requestMatchers("api/students/**").hasRole("STUDENT")
-                        .requestMatchers("api/teacher/**").hasRole("TEACHER")
+                        .requestMatchers("/api/students/**").hasRole("STUDENT")
+                        .requestMatchers("/api/teacher/**").hasRole("TEACHER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

@@ -20,7 +20,7 @@ public class JwtService {
 
     public String generateToken(UserEntity userEntity ) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userEntity.getRole().getRoleName());
+        claims.put("role", "ROLE_" + userEntity.getRole().getRoleName());
         claims.put("id", userEntity.getId());
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifeTime.toMillis());
@@ -38,7 +38,9 @@ public class JwtService {
     }
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsername(token);
-        return userDetails.getUsername().equals(username) && isTokenExpired(token);
+        var t = userDetails.getUsername().equals(username);
+        var a = isTokenExpired(token);
+        return userDetails.getUsername().equals(username) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

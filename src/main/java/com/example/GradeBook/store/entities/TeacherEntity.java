@@ -28,7 +28,7 @@ public class TeacherEntity {
     @JoinColumn(referencedColumnName = "id")
     private UserEntity userId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     private SubjectTypeEntity subjectType;
 }

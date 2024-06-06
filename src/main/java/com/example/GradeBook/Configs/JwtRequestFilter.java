@@ -54,6 +54,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         var jwt = authHeader.substring(BEARER_PREFIX.length());
         var username = jwtService.getUsername(jwt);
+        String role = jwtService.getRole(jwt);
 
         if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService

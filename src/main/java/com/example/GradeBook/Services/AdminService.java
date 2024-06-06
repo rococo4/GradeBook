@@ -10,14 +10,8 @@ import com.example.GradeBook.Factories.TeacherFactory;
 import com.example.GradeBook.Response.ClassResponse;
 import com.example.GradeBook.Response.StudentResponse;
 import com.example.GradeBook.Response.TeacherResponse;
-import com.example.GradeBook.store.entities.ClassEntity;
-import com.example.GradeBook.store.entities.StudentEntity;
-import com.example.GradeBook.store.entities.TeacherEntity;
-import com.example.GradeBook.store.entities.UserEntity;
-import com.example.GradeBook.store.repositories.ClassRepository;
-import com.example.GradeBook.store.repositories.StudentRepository;
-import com.example.GradeBook.store.repositories.TeacherRepository;
-import com.example.GradeBook.store.repositories.UserRepository;
+import com.example.GradeBook.store.entities.*;
+import com.example.GradeBook.store.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
@@ -37,18 +31,18 @@ public class AdminService {
     private final ClassRepository classRepository;
     private final ClassFactory classFactory;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     public StudentResponse addUpdateStudent(StudentDto studentDto) {
         UserEntity user = userRepository
                 .findById(studentDto.getUserId())
                 .orElseThrow(() -> new NotFoundException(
                         String.format("User with id %s not found", studentDto.getUserId())));
-        user.getRole().setRoleId(1L);
-        user.getRole().setRoleName("STUDENT");
+        user.setRole(roleRepository.findById(1L).orElseThrow());;
         userRepository.saveAndFlush(user);
 
         StudentEntity studentEntity = studentRepository
-                .save(studentFactory.makeStudentEntity(studentDto));
+                .saveAndFlush(studentFactory.makeStudentEntity(studentDto));
         return studentFactory.makeStudentResponse(studentEntity);
 
     }
@@ -78,8 +72,7 @@ public class AdminService {
     public TeacherResponse addUpdateTeacher(TeacherDto teacherDto) {
         UserEntity user = userRepository.findById(teacherDto.getUserId()).orElseThrow(() -> new NotFoundException(
                 String.format("User for  with id %s not found", teacherDto.getUserId())));
-        user.getRole().setRoleId(3L);
-        user.getRole().setRoleName("TEACHER");
+        user.setRole(roleRepository.findById(3L).orElseThrow());
         userRepository.saveAndFlush(user);
 
         TeacherEntity teacherEntity = teacherRepository
